@@ -61,12 +61,19 @@ func TestNewBuilder(t *testing.T) {
 func TestBuilderEOD(t *testing.T) {
 	tcs := []struct {
 		name    string
+		symbols []string
 		options []request.EODOption
 		err     error
 	}{
 		{
 			name:    "NoOptions",
+			symbols: []string{"symbols"},
 			options: []request.EODOption{},
+		},
+		{
+			name:    "NoSymbols",
+			options: []request.EODOption{},
+			err:     request.ErrSymbols,
 		},
 	}
 
@@ -74,7 +81,33 @@ func TestBuilderEOD(t *testing.T) {
 
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			_, err := builder.EOD(context.TODO(), []string{"symbols"})
+			_, err := builder.EOD(context.TODO(), tc.symbols)
+			if tc.err != nil {
+				if !errors.Is(err, tc.err) {
+					t.Fatalf("EXPECTED: %s\nACTUAL: %s", tc.err, err)
+				}
+			}
+		})
+	}
+}
+
+func TestBuilderDividends(t *testing.T) {
+	tcs := []struct {
+		name    string
+		options []request.DividendsOption
+		err     error
+	}{
+		{
+			name:    "NoOptions",
+			options: []request.DividendsOption{},
+		},
+	}
+
+	builder, _ := request.NewBuilder()
+
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := builder.Dividends(context.TODO(), []string{"symbols"})
 			if tc.err != nil {
 				if !errors.Is(err, tc.err) {
 					t.Fatalf("EXPECTED: %s\nACTUAL: %s", tc.err, err)
