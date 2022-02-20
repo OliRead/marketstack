@@ -63,7 +63,7 @@ func (s *Splits) Query() url.Values {
 }
 
 func (s *Splits) Action() action {
-	return ActionDividends
+	return ActionSplits
 }
 
 func SplitsWithSortOrder(order SortOrder) SplitsOption {

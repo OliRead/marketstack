@@ -7,6 +7,7 @@ type action byte
 const (
 	ActionEOD action = iota
 	ActionDividends
+	ActionSplits
 )
 
 func (a action) endpoint() string {
@@ -15,6 +16,8 @@ func (a action) endpoint() string {
 		return "eod"
 	case ActionDividends:
 		return "dividends"
+	case ActionSplits:
+		return "splits"
 	default:
 		return ""
 	}
@@ -25,6 +28,8 @@ func (a action) method() string {
 	case ActionEOD:
 		return http.MethodGet
 	case ActionDividends:
+		return http.MethodGet
+	case ActionSplits:
 		return http.MethodGet
 	default:
 		return ""
