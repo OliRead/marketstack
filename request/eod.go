@@ -59,7 +59,7 @@ func (e *EOD) Query() url.Values {
 	}
 
 	if e.offset != nil {
-		v.Add("offset", strconv.Itoa(*e.limit))
+		v.Add("offset", strconv.Itoa(*e.offset))
 	}
 
 	return v

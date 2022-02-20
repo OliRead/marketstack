@@ -24,15 +24,30 @@ func NewBuilder(opts ...BuilderOption) (*Builder, error) {
 }
 
 func (b *Builder) EOD(ctx context.Context, symbols []string, opts ...EODOption) (*http.Request, error) {
-	msg := EOD{
-		symbols: symbols,
+	msg, err := NewEOD(symbols, opts...)
+	if err != nil {
+		return nil, err
 	}
 
-	for _, opt := range opts {
-		opt(&msg)
+	return b.Build(ctx, msg)
+}
+
+func (b *Builder) Dividends(ctx context.Context, symbols []string, opts ...DividendsOption) (*http.Request, error) {
+	msg, err := NewDividends(symbols, opts...)
+	if err != nil {
+		return nil, err
 	}
 
-	return b.Build(ctx, &msg)
+	return b.Build(ctx, msg)
+}
+
+func (b *Builder) Splits(ctx context.Context, symbols []string, opts ...SplitsOption) (*http.Request, error) {
+	msg, err := NewSplits(symbols, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	return b.Build(ctx, msg)
 }
 
 func (b *Builder) Build(ctx context.Context, msg Message) (*http.Request, error) {
