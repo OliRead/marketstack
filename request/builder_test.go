@@ -116,3 +116,29 @@ func TestBuilderDividends(t *testing.T) {
 		})
 	}
 }
+
+func TestBuilderSplits(t *testing.T) {
+	tcs := []struct {
+		name    string
+		options []request.DividendsOption
+		err     error
+	}{
+		{
+			name:    "NoOptions",
+			options: []request.DividendsOption{},
+		},
+	}
+
+	builder, _ := request.NewBuilder()
+
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := builder.Splits(context.TODO(), []string{"symbols"})
+			if tc.err != nil {
+				if !errors.Is(err, tc.err) {
+					t.Fatalf("EXPECTED: %s\nACTUAL: %s", tc.err, err)
+				}
+			}
+		})
+	}
+}

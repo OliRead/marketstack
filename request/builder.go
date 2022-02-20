@@ -41,6 +41,15 @@ func (b *Builder) Dividends(ctx context.Context, symbols []string, opts ...Divid
 	return b.Build(ctx, msg)
 }
 
+func (b *Builder) Splits(ctx context.Context, symbols []string, opts ...SplitsOption) (*http.Request, error) {
+	msg, err := NewSplits(symbols, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	return b.Build(ctx, msg)
+}
+
 func (b *Builder) Build(ctx context.Context, msg Message) (*http.Request, error) {
 	query := msg.Query()
 	query.Add("access_key", b.apiKey)

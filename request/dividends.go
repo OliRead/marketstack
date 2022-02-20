@@ -56,7 +56,7 @@ func (d *Dividends) Query() url.Values {
 	}
 
 	if d.offset != nil {
-		v.Add("offset", strconv.Itoa(*d.limit))
+		v.Add("offset", strconv.Itoa(*d.offset))
 	}
 
 	return v
