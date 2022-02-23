@@ -15,11 +15,19 @@ type Client struct {
 	builder    *request.Builder
 }
 
-func NewClient(b *request.Builder) *Client {
-	return &Client{
+type ClientOption func(c *Client)
+
+func NewClient(b *request.Builder, opts ...ClientOption) *Client {
+	c := &Client{
 		httpClient: http.DefaultClient,
 		builder:    b,
 	}
+
+	for _, opt := range opts {
+		opt(c)
+	}
+
+	return c
 }
 
 func (c *Client) EOD(ctx context.Context, symbols []string, opts ...request.EODOption) (EOD, error) {
@@ -101,4 +109,10 @@ func (c *Client) execute(req *http.Request) (*http.Response, error) {
 	}
 
 	return res, nil
+}
+
+func ClientWithHTTPClient(httpClient *http.Client) ClientOption {
+	return func(c *Client) {
+		c.httpClient = httpClient
+	}
 }
